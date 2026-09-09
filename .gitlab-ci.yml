@@ -1,0 +1,31 @@
+# Builds the Next.js static export and publishes it to GitLab Pages
+# on every push to the default branch.
+
+image: node:20
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  cache:
+    key:
+      files:
+        - package.json
+    paths:
+      - .npm/
+  before_script:
+    # Derive the base path from the Pages URL, e.g. "/klaude-project" for
+    # https://klaude-group.gitlab.io/klaude-project/ or "" for a unique/custom domain.
+    - export NEXT_PUBLIC_BASE_PATH=$(echo "$CI_PAGES_URL" | sed -E 's#^https?://[^/]+##; s#/$##')
+    - echo "Building with base path '$NEXT_PUBLIC_BASE_PATH'"
+  script:
+    - npm install --no-audit --no-fund --cache .npm --prefer-offline
+    - npm run build
+  pages:
+    publish: out
+  artifacts:
+    paths:
+      - out
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
