@@ -6,7 +6,10 @@
    active colour theme. Sits to the right of the hero on desktop.
    ========================================================================== */
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+// Loaded as a classic script (works over file:// too); Three.js is pulled in
+// with a dynamic import so no <script type="module"> is required.
+const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+let THREE = null;
 
 const canvas = document.getElementById("bg-canvas");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -14,7 +17,15 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 if (!canvas || reduceMotion) {
   canvas?.remove();
 } else {
-  initScene();
+  import(THREE_URL)
+    .then((mod) => {
+      THREE = mod;
+      initScene();
+    })
+    .catch((error) => {
+      console.warn("3D scene unavailable:", error);
+      canvas.remove();
+    });
 }
 
 function cssColor(name) {

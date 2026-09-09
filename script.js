@@ -86,7 +86,11 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     if (!target) return;
     event.preventDefault();
     scrollToElement(target);
-    history.replaceState(null, "", href);
+    try {
+      history.replaceState(null, "", href);
+    } catch (_) {
+      // file:// origins refuse replaceState; the scroll itself still works.
+    }
   });
 });
 
