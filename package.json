@@ -8,7 +8,8 @@
     "dev": "next dev",
     "prebuild": "node scripts/ensure-deps.mjs",
     "build": "next build",
-    "start": "npx serve out"
+    "start": "npx serve out",
+    "deploy": "next build && gh-pages -d out"
   },
   "dependencies": {
     "lenis": "^1.1.18",
@@ -19,5 +20,8 @@
   },
   "engines": {
     "node": ">=18.17"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
