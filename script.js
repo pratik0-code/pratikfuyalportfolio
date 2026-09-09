@@ -3,9 +3,11 @@
    Edit the config blocks below (LINKS, PROJECTS, ROLES) with your details.
    ========================================================================== */
 
-/** Contact / social links. Leave a value empty ("") to hide it. */
+/** Email shown in the Contact section and used to deliver contact-form messages. */
+const CONTACT_EMAIL = "official.pratikfuyalb@gmail.com";
+
+/** Social links shown as buttons in the Contact section. Leave a value empty ("") to hide it. */
 const LINKS = {
-  email: "",                                  // e.g. "mailto:you@example.com"
   github: "",                                 // e.g. "https://github.com/username"
   linkedin: "",                               // e.g. "https://www.linkedin.com/in/username"
   twitter: "",                                // e.g. "https://x.com/username"
@@ -387,6 +389,67 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     { threshold: 0.12 }
   );
   items.forEach((item) => observer.observe(item));
+})();
+
+/* --------------------------------------------------------------------------
+   Contact form (delivered to CONTACT_EMAIL via FormSubmit)
+   -------------------------------------------------------------------------- */
+(function initContactForm() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+
+  const status = form.querySelector(".form-status");
+  const button = form.querySelector(".form-submit");
+  const label = button.querySelector(".btn-label");
+  const emailLink = document.querySelector(".contact-email");
+
+  form.action = `https://formsubmit.co/${CONTACT_EMAIL}`;
+  if (emailLink) {
+    emailLink.href = `mailto:${CONTACT_EMAIL}`;
+    emailLink.textContent = CONTACT_EMAIL;
+  }
+
+  const setStatus = (text, kind) => {
+    status.textContent = text;
+    status.className = `form-status${kind ? ` is-${kind}` : ""}`;
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    button.disabled = true;
+    label.textContent = "Sending\u2026";
+    setStatus("");
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || String(result.success) !== "true") {
+        throw new Error(result.message || "Request failed");
+      }
+
+      form.reset();
+      label.textContent = "Sent \u2713";
+      setStatus("Thanks! Your message is on its way.", "success");
+      setTimeout(() => {
+        label.textContent = "Send message";
+        button.disabled = false;
+      }, 4000);
+    } catch (error) {
+      label.textContent = "Send message";
+      button.disabled = false;
+      setStatus(`Something went wrong. Please email me directly at ${CONTACT_EMAIL}.`, "error");
+    }
+  });
 })();
 
 /* --------------------------------------------------------------------------
