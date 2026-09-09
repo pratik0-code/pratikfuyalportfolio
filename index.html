@@ -12,8 +12,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
 </head>
 <body>
+  <div id="preloader" class="preloader" aria-hidden="true"><span>P<i>.</i>F</span></div>
+  <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -43,24 +53,33 @@
     <!-- Hero -->
     <section id="top" class="hero container">
       <p class="eyebrow reveal">Hello, I am</p>
-      <h1 class="hero-title reveal">Pratik <em>Fuyal</em></h1>
+      <h1 class="hero-title" data-split>Pratik <em>Fuyal</em></h1>
       <p class="hero-roles reveal">
-        <span>AI/ML Enthusiast</span>
-        <span class="sep" aria-hidden="true">·</span>
-        <span>Web Developer</span>
-        <span class="sep" aria-hidden="true">·</span>
-        <span>Cybersecurity Learner</span>
+        <span class="roles-prefix">I am a</span>
+        <span id="typed" class="typed">AI/ML Enthusiast</span><span class="caret" aria-hidden="true"></span>
       </p>
       <p class="hero-lead reveal">
         I build intelligent, well-crafted software: from machine learning experiments
         to clean, fast web experiences, with a growing focus on keeping systems secure.
       </p>
       <div class="hero-actions reveal">
-        <a href="#projects" class="btn btn-primary">View my work</a>
-        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+        <a href="#projects" class="btn btn-primary magnetic">View my work</a>
+        <a href="#contact" class="btn btn-ghost magnetic">Get in touch</a>
       </div>
-      <div class="hero-ornament" aria-hidden="true"></div>
+      <a href="#about" class="scroll-cue" aria-label="Scroll to about section">
+        <span>Scroll</span><i></i>
+      </a>
     </section>
+
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marquee-track">
+        <span>Python</span><span>✦</span><span>TensorFlow</span><span>✦</span><span>PyTorch</span><span>✦</span>
+        <span>scikit-learn</span><span>✦</span><span>JavaScript</span><span>✦</span><span>React</span><span>✦</span>
+        <span>Node.js</span><span>✦</span><span>Linux</span><span>✦</span><span>Networking</span><span>✦</span>
+        <span>OWASP</span><span>✦</span><span>Nmap</span><span>✦</span><span>Git</span><span>✦</span>
+      </div>
+    </div>
 
     <!-- About -->
     <section id="about" class="section container">
@@ -85,7 +104,7 @@
             practising on capture-the-flag challenges.
           </p>
         </div>
-        <aside class="about-facts reveal">
+        <aside class="about-facts reveal tilt">
           <dl>
             <div><dt>Focus</dt><dd>AI / Machine Learning</dd></div>
             <div><dt>Craft</dt><dd>Web Development</dd></div>
@@ -103,7 +122,7 @@
         <h2>Skills</h2>
       </div>
       <div class="cards">
-        <article class="card reveal">
+        <article class="card reveal tilt">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-3 3.87A4 4 0 0 0 6 18a4 4 0 0 0 6 3.46A4 4 0 0 0 18 18a4 4 0 0 0 1-7.13V10a4 4 0 0 0-3-3V6a4 4 0 0 0-4-4z"/><path d="M12 2v20M8 10h8M9 14h6"/></svg>
           </div>
@@ -114,7 +133,7 @@
           </ul>
         </article>
 
-        <article class="card reveal">
+        <article class="card reveal tilt">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
           </div>
@@ -125,7 +144,7 @@
           </ul>
         </article>
 
-        <article class="card reveal">
+        <article class="card reveal tilt">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.25 3.4 10.15 8 11.5 4.6-1.35 8-6.25 8-11.5V5z"/><path d="m9 12 2 2 4-4"/></svg>
           </div>
@@ -170,6 +189,8 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
   <script src="script.js" defer></script>
+  <script type="module" src="three-scene.js"></script>
 </body>
 </html>
